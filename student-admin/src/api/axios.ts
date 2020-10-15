@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { getItemStr } from '../utils'
 
+console.log(process.env.REACT_APP_ENV);
+
 axios.interceptors.request.use(
   (config) => {
     const token = getItemStr('token')

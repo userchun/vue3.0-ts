@@ -5,6 +5,8 @@ import Login from '../views/Login'
 
 const Not = lazy(() => import('../views/Not'))
 const Home = lazy(() => import('../views/Home'))
+const NewModule= lazy(() => import('../views/NewModule'))
+
 export interface IRouterProps {
   path: string //路径
   component: any //对应的组件
@@ -26,8 +28,28 @@ const routers: IRouterProps[] = [
       {
         path: '/home',
         component: Home,
+        routes:[
+          {
+            path: '/home',
+            exact: true,
+            component: NewModule,
+          },
+          {
+            path: '/home/newmodule',
+            component: NewModule,
+            routes: [
+            ],
+            
+          },
+          {
+            path: '*',
+            component: Not,
+            requiresAuth: false,
+            authed: 0,
+            routes: [],
+          },
+        ]
       },
-
       {
         path: '*',
         component: Not,

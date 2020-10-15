@@ -3,7 +3,7 @@ import './index.less'
 import { Form, Input, Button, Checkbox } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import sha512 from 'js-sha512'
-import Loading from '../../components/loading'
+// import Loading from '../../components/loading'
 const Login = (props: any) => {
   const { history } = props
   const onFinish = (values: any) => {
@@ -18,7 +18,6 @@ const Login = (props: any) => {
       password,
     }
     console.log(params)
-
     history.push('/home')
   }
 
@@ -74,9 +73,9 @@ const Login = (props: any) => {
                   <Checkbox>Remember me</Checkbox>
                 </Form.Item>
 
-                <a className="login-form-forgot" href="/">
+                {/* <a className="login-form-forgot" href="/">
                   Forgot password
-                </a>
+                </a> */}
               </Form.Item>
 
               <Form.Item>

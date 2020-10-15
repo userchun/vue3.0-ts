@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { Layout, Menu } from 'antd'
+import {Link} from  'react-router-dom'
+import { renderRoutes } from 'react-router-config'
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
+  PlusOutlined,
   UploadOutlined,
 } from '@ant-design/icons'
 import './index.less'
@@ -16,8 +17,9 @@ const meanItemStyle = {
   fontSize: 22,
 }
 const Home = (props: any) => {
-  // const { hisrory, location } = props
+  const { route,location } = props
   const [collapsed, setCollapsed] = useState(false)
+ 
   const toggle = () => {
     setCollapsed(!collapsed)
   }
@@ -31,29 +33,33 @@ const Home = (props: any) => {
           style={{ background: '#464c5b' }}
           theme="light"
           collapsed={collapsed}>
-          <div className="logo"> 学员端后台管理 </div>
+          <div className="logo"> </div>
           <Menu
             theme="light"
             style={{ background: '#464c5b', color: '#FFFFFF' }}
             mode="inline"
-            defaultSelectedKeys={['1']}>
+            defaultSelectedKeys={location.pathname === '/home'
+            ? '/home/newmodule'
+            : location.pathname}>
             <Menu.Item
               style={{ ...meanItemStyle }}
-              key="1"
-              icon={<UserOutlined style={{ fontSize: 22 }} />}>
-              nav 1
+              key="/home/newmodule"
+              icon={<PlusOutlined style={{ fontSize: 22 }} />}>
+             <Link
+                  to="/home/newmodule"
+                  style={{ paddingTop: 0 }}>
+                    新增模块
+                </Link>
             </Menu.Item>
             <Menu.Item
               style={{ ...meanItemStyle }}
-              key="2"
-              icon={<VideoCameraOutlined style={{ fontSize: 22 }} />}>
-              nav 2
-            </Menu.Item>
-            <Menu.Item
-              style={{ ...meanItemStyle }}
-              key="3"
+              key="/home/setting"
               icon={<UploadOutlined style={{ fontSize: 22 }} />}>
-              nav 3
+            <Link
+              to="/home/setting"
+              style={{ paddingTop: 0 }}>
+                新增模块
+            </Link>
             </Menu.Item>
           </Menu>
         </Sider>
@@ -66,8 +72,11 @@ const Home = (props: any) => {
           </Header>
           <Content
             className="site-layout-background"
-            style={{ margin: 10, padding: 10 }}>
-            Content
+            style={{
+              margin: 15,
+              padding: 15,
+            }}>
+            {renderRoutes(route.routes)}
           </Content>
         </Layout>
       </Layout>

@@ -2,6 +2,7 @@ import React, { memo, useEffect } from 'react'
 import { renderRoutes } from 'react-router-config'
 import { withRouter } from 'react-router-dom'
 
+interface Props {}
 export default memo(
   withRouter(function Root(props: any) {
     const { history, location, route } = props
