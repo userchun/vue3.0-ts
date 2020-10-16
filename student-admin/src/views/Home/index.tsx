@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, FC } from 'react'
 import { Layout, Menu } from 'antd'
-import {Link} from  'react-router-dom'
+import { Link } from 'react-router-dom'
 import { renderRoutes } from 'react-router-config'
 import {
   MenuUnfoldOutlined,
@@ -9,6 +9,7 @@ import {
   UploadOutlined,
 } from '@ant-design/icons'
 import './index.less'
+import { RouteComponentProps } from 'react-router-dom'
 
 const { Header, Sider, Content } = Layout
 const meanItemStyle = {
@@ -16,10 +17,11 @@ const meanItemStyle = {
   paddingTop: 5,
   fontSize: 22,
 }
-const Home = (props: any) => {
-  const { route,location } = props
-  const [collapsed, setCollapsed] = useState(false)
- 
+
+const Home: FC<RouteComponentProps> = (props: any) => {
+  const { route, location } = props
+  const [collapsed, setCollapsed] = useState<boolean>(false)
+
   const toggle = () => {
     setCollapsed(!collapsed)
   }
@@ -38,28 +40,26 @@ const Home = (props: any) => {
             theme="light"
             style={{ background: '#464c5b', color: '#FFFFFF' }}
             mode="inline"
-            defaultSelectedKeys={location.pathname === '/home'
-            ? '/home/newmodule'
-            : location.pathname}>
+            defaultSelectedKeys={
+              location.pathname === '/home'
+                ? '/home/newmodule'
+                : location.pathname
+            }>
             <Menu.Item
               style={{ ...meanItemStyle }}
               key="/home/newmodule"
               icon={<PlusOutlined style={{ fontSize: 22 }} />}>
-             <Link
-                  to="/home/newmodule"
-                  style={{ paddingTop: 0 }}>
-                    新增模块
-                </Link>
+              <Link to="/home/newmodule" style={{ paddingTop: 0 }}>
+                新增模块
+              </Link>
             </Menu.Item>
             <Menu.Item
               style={{ ...meanItemStyle }}
               key="/home/setting"
               icon={<UploadOutlined style={{ fontSize: 22 }} />}>
-            <Link
-              to="/home/setting"
-              style={{ paddingTop: 0 }}>
+              <Link to="/home/setting" style={{ paddingTop: 0 }}>
                 新增模块
-            </Link>
+              </Link>
             </Menu.Item>
           </Menu>
         </Sider>

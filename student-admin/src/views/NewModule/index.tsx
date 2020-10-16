@@ -6,6 +6,7 @@ import React, {
   createContext,
   memo,
   useMemo,
+  FC,
 } from 'react'
 import { Tabs } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
@@ -15,16 +16,20 @@ import {
   courseLesson,
   courseType,
   gameOverInfo,
+  getGameInfo,
 } from '../../api'
 
 import './index.less'
 import SelectComponent from './SelectComponent'
 import RenderTabPane from './RenderTabPane/index'
 import ListModal from './ListModal'
-import { setItemObj, getItemObj } from '../../utils'
+import { setItemObj, getItemObj, areEqual } from '../../utils'
 const { TabPane } = Tabs
+
 export const Context = createContext({})
-const NewModule = (props: any) => {
+export const GameInfoContext = createContext({})
+
+const NewModule: FC = () => {
   //四个下拉框
   const [courseSeriesList, setCourseSeriesList] = useState([])
   const [courseLevelList, setCourseLevel] = useState([])
@@ -54,8 +59,8 @@ const NewModule = (props: any) => {
   const [radioInfo, setRadioInfo] = useState({
     coverUrl: 'http://winabc.oss-cn-hangzhou.aliyuncs.com/website/default.jpg',
   })
+  const [gameInfo, setGameInfo] = useState({})
   // radio选中模组信息
-
   const courseSeriesChange = (value: string, option: any) => {
     const { key } = option
     setCourseLessonParams({
@@ -113,6 +118,13 @@ const NewModule = (props: any) => {
   const onTabClick = (gameId) => {
     setGameId(gameId)
   }
+  useMemo(() => {
+    const getGameInfoFn = async () => {
+      const gameInfoRes: any = await getGameInfo({ gameId })
+      setGameInfo(gameInfoRes.data)
+    }
+    gameId && getGameInfoFn()
+  }, [gameId])
 
   useEffect(() => {
     const initialization = async () => {
@@ -166,61 +178,66 @@ const NewModule = (props: any) => {
   }, [gameOverInfoParams])
   return (
     <Fragment>
-      <Context.Provider value={gameOverInfoParams}>
-        <div style={{ display: 'flex' }}>
-          <SelectComponent
-            data={courseSeriesList}
-            onChange={courseSeriesChange}
+      <GameInfoContext.Provider value={gameInfo}>
+        <Context.Provider value={gameOverInfoParams}>
+          <div style={{ display: 'flex' }}>
+            <SelectComponent
+              data={courseSeriesList}
+              onChange={courseSeriesChange}
+            />
+            <SelectComponent
+              data={courseLessonList}
+              onChange={courseLessonChange}
+            />
+            <SelectComponent
+              data={courseLevelList}
+              onChange={courseLevelChange}
+            />
+            <SelectComponent
+              data={courseTypeList}
+              onChange={courseTypeChange}
+            />
+          </div>
+          <div className="games">
+            <Tabs
+              tabBarGutter={15}
+              onTabClick={onTabClick}
+              addIcon={
+                <div className="item-tab">
+                  <PlusOutlined
+                    style={{ fontSize: 30, width: 80 }}
+                    onClick={addGameIcon}
+                  />
+                </div>
+              }
+              size="large"
+              type="editable-card">
+              {gameList.map((item: any, i: number) => {
+                return (
+                  <TabPane
+                    key={item.gameId}
+                    closeIcon={<div style={{ display: 'none' }}></div>}
+                    className="add-game"
+                    tab={<div className="item-tab">{i + 1}</div>}></TabPane>
+                )
+              })}
+            </Tabs>
+            <RenderTabPane
+              radioInfo={radioInfo}
+              gameId={gameId}
+              gameOverInfoParams={gameOverInfoParams}
+            />
+          </div>
+          <ListModal
+            visible={modalVisible}
+            handleOk={modalHandleOk}
+            handleCancel={modalHandleCancel}
+            onChange={radioOnChange}
           />
-          <SelectComponent
-            data={courseLessonList}
-            onChange={courseLessonChange}
-          />
-          <SelectComponent
-            data={courseLevelList}
-            onChange={courseLevelChange}
-          />
-          <SelectComponent data={courseTypeList} onChange={courseTypeChange} />
-        </div>
-        <div className="games">
-          <Tabs
-            tabBarGutter={15}
-            onTabClick={onTabClick}
-            addIcon={
-              <div className="item-tab">
-                <PlusOutlined
-                  style={{ fontSize: 30, width: 80 }}
-                  onClick={addGameIcon}
-                />
-              </div>
-            }
-            size="large"
-            type="editable-card">
-            {gameList.map((item: any, i: number) => {
-              return (
-                <TabPane
-                  key={item.gameId}
-                  closeIcon={<div></div>}
-                  className="add-game"
-                  tab={<div className="item-tab">{i + 1}</div>}></TabPane>
-              )
-            })}
-          </Tabs>
-          <RenderTabPane
-            radioInfo={radioInfo}
-            gameId={gameId}
-            gameOverInfoParams={gameOverInfoParams}
-          />
-        </div>
-        <ListModal
-          visible={modalVisible}
-          handleOk={modalHandleOk}
-          handleCancel={modalHandleCancel}
-          onChange={radioOnChange}
-        />
-      </Context.Provider>
+        </Context.Provider>
+      </GameInfoContext.Provider>
     </Fragment>
   )
 }
 
-export default memo(NewModule)
+export default memo(NewModule, areEqual)

@@ -1,10 +1,11 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, FC } from 'react'
 import './index.less'
 import { Form, Input, Button, Checkbox } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import sha512 from 'js-sha512'
-// import Loading from '../../components/loading'
-const Login = (props: any) => {
+
+interface Props {}
+const Login: FC<Props> = (props: any) => {
   const { history } = props
   const onFinish = (values: any) => {
     let { username, password } = values

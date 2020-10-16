@@ -1,12 +1,17 @@
-import React, { memo } from 'react'
+import React, { memo, useContext } from 'react'
 import { Select } from 'antd'
+import { GameInfoContext } from '../index'
+import { areEqual } from '../../../utils'
 const { Option } = Select
 const selectStyle = {
   width: 250,
   margin: '10px 20px',
 }
+
 const SelectComponent = (props: any) => {
   const { data, onChange } = props
+  const gameInfo = useContext(GameInfoContext)
+
   return (
     <Select
       placeholder={data.length ? data[0].value : ''}
@@ -22,4 +27,5 @@ const SelectComponent = (props: any) => {
     </Select>
   )
 }
-export default memo(SelectComponent)
+
+export default memo(SelectComponent, areEqual)

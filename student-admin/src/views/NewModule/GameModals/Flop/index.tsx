@@ -1,14 +1,14 @@
-import React, { Fragment, useState, useMemo, useContext, memo } from 'react'
+import React, { Fragment, useState, useContext, memo, FC } from 'react'
 import { Image, Radio, Input, Form, Button, message } from 'antd'
 import './index.less'
-import { Context } from '../../../views/NewModule/index'
+import { Context } from '../../index'
 import FlopUpload from '../FlopUpload'
-import { addChoiceTypeGame } from '../../../api'
+import { addChoiceTypeGame } from '../../../../api'
 const { Group } = Radio
 const { Item } = Form
 const fileList: any[] = []
-function Flop(props: any) {
-  const { push, radioInfo, gameId } = props
+const Flop: FC = (props: any) => {
+  const { push, radioInfo } = props
   const { coverUrl } = radioInfo
   const contextValue: any = useContext(Context)
   const [value, setValue] = useState(3)
@@ -50,9 +50,6 @@ function Flop(props: any) {
     }
   }
 
-  useMemo(() => {
-    gameId && console.log(gameId, 'useMemo')
-  }, [gameId])
   const renderFlopUploads = () => {
     const arrValue: number[] = []
     for (let i: number = 0; i < value; i++) {
